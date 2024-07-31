@@ -13,19 +13,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.aop.interceptor.ExposeBeanNameAdvisors.getBeanName;
-
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 public class SecurityConfigurations {
     @Autowired
     private SecurityFilter securityFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers("/login/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/swagger*").permitAll()
+                    .requestMatchers("/swagger-resources/**").permitAll()
+                    .requestMatchers("/v2/api-docs").permitAll()
                     .requestMatchers("/open/**").permitAll()
                     .requestMatchers("/user/**").permitAll()
                     .requestMatchers("/task/**").permitAll()
@@ -34,6 +37,7 @@ public class SecurityConfigurations {
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
