@@ -28,12 +28,8 @@ public class TaskRestController {
             @ApiResponse(responseCode = "201", description = "Task created"),
             @ApiResponse(responseCode = "400", description = "Error on create task")
     })
-    public ResponseEntity<String> create(@RequestBody TaskHelper taskDto, @AuthenticationPrincipal User user) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(taskDto, user));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<?> create(@RequestBody TaskHelper taskDto, @AuthenticationPrincipal User user) {
+        return taskService.create(taskDto, user);
     }
 
     @GetMapping("/list")

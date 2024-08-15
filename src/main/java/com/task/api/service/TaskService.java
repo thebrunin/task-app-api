@@ -11,6 +11,7 @@ import com.task.api.service.util.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +24,19 @@ public class TaskService {
     @Autowired
     UserRepository userRepository;
 
-    public String create(TaskHelper dto, User user) {
+    public ResponseEntity<?> create(TaskHelper dto, User user) {
         if (dto.getResponsibleUser() != null && !dto.getResponsibleUser().isEmpty()) {
             User responsibleUser = userRepository.findById(dto.getResponsibleUser()).orElse(null);
             if (responsibleUser == null) {
-                throw new IllegalArgumentException("Usuário responsável não encontrado");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário responsável não encontrado");
             }
         }
-
         Task task = this.fromDto(dto);
         task.setUserId(user.getId());
         task.setStatus(TaskStatus.CREATED);
         task.setCreatedAt(LocalDateTime.now());
 
-        toDto(repository.save(task));
-        return "Tarefa criada com sucesso!";
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(repository.save(task)));
     }
 
     public Page<TaskHelper> getTasks(Pageable pag) {
