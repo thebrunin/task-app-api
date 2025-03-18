@@ -1,5 +1,6 @@
 package com.task.api.rest;
 
+import com.task.api.dto.task.TaskRequestDto;
 import com.task.api.helper.TaskHelper;
 import com.task.api.model.User;
 import com.task.api.service.TaskService;
@@ -28,7 +29,7 @@ public class TaskRestController {
             @ApiResponse(responseCode = "201", description = "Task created"),
             @ApiResponse(responseCode = "400", description = "Error on create task")
     })
-    public ResponseEntity<?> create(@RequestBody TaskHelper taskDto, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> create(@RequestBody TaskRequestDto taskDto, @AuthenticationPrincipal User user) {
         return taskService.create(taskDto, user);
     }
 
@@ -38,7 +39,7 @@ public class TaskRestController {
             @ApiResponse(responseCode = "200", description = "Tasks found"),
             @ApiResponse(responseCode = "400", description = "Error on get tasks")
     })
-    public ResponseEntity<Page<TaskHelper>> getTasks(@PageableDefault(size=10, sort = {"createdAt"}) Pageable pag) {
+    public ResponseEntity<Page<TaskRequestDto>> getTasks(@PageableDefault(size=10, sort = {"createdAt"}) Pageable pag) {
         try {
             return ResponseEntity.ok(taskService.getTasks(pag));
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.task.api;
 
+import com.task.api.dto.task.TaskRequestDto;
 import com.task.api.enums.TaskStatus;
-import com.task.api.helper.TaskHelper;
 import com.task.api.model.Task;
 import com.task.api.model.User;
 import com.task.api.repository.TaskRepository;
@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -55,9 +54,7 @@ public class TaskServiceTest {
 
     @Test
     void testCreateTaskWithResponsibleUserFound() {
-        // Dado
-        TaskHelper dto = new TaskHelper();
-        dto.setResponsibleUser("responsibleUserId");
+        TaskRequestDto dto = new TaskRequestDto("responsibleUserId", "responsibleUserId", null, null, null, null);
 
         User responsibleUser = new User();
         responsibleUser.setId("responsibleUserId");
@@ -70,18 +67,17 @@ public class TaskServiceTest {
 
         // Então
         assertEquals(HttpStatus.CREATED, createTaskResponse.getStatusCode());
-        TaskHelper createdTask = (TaskHelper) createTaskResponse.getBody();
+        TaskRequestDto createdTask = (TaskRequestDto) createTaskResponse.getBody();
         assertNotNull(createdTask);
-        assertEquals(user.getId(), createdTask.getUserId());
-        assertEquals(TaskStatus.CREATED, createdTask.getStatus());
+        assertEquals(user.getId(), createdTask.userId());
+        assertEquals(TaskStatus.CREATED, createdTask.status());
         verify(repository).save(any(Task.class));
     }
 
     @Test
     void testCreateTaskWithResponsibleUserNotFound() {
         // Dado
-        TaskHelper dto = new TaskHelper();
-        dto.setResponsibleUser("nonExistentUserId");
+        TaskRequestDto dto = new TaskRequestDto(null, "nonExistentUserId", null, null, null, null);
 
         when(userRepository.findById("nonExistentUserId")).thenReturn(Optional.empty());
 
@@ -97,18 +93,18 @@ public class TaskServiceTest {
     @Test
     void testCreateTaskWithoutResponsibleUser() {
         // Dado
-        TaskHelper dto = new TaskHelper();
+        TaskRequestDto dto = new TaskRequestDto();
 
         when(repository.save(any(Task.class))).thenAnswer(i -> i.getArgument(0));
 
         // Quando
         ResponseEntity<?> createTaskResponse = taskService.create(dto, user);
-        TaskHelper createdTask = (TaskHelper) createTaskResponse.getBody();
+        TaskRequestDto createdTask = (TaskRequestDto) createTaskResponse.getBody();
 
         // Então
         assertNotNull(createdTask);
-        assertEquals(user.getId(), createdTask.getUserId());
-        assertEquals(TaskStatus.CREATED, createdTask.getStatus());
+        assertEquals(user.getId(), createdTask.userId());
+        assertEquals(TaskStatus.CREATED, createdTask.status());
         verify(repository).save(any(Task.class));
     }
 
