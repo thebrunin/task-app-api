@@ -1,6 +1,6 @@
 package com.task.api.model;
 
-import com.task.api.dto.UserDto;
+import com.task.api.dto.user.UserRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,9 +54,9 @@ public class User implements UserDetails {
         return true;
     }
 
-    public User(UserDto userDto) {
-        this.email = userDto.email();
-        this.password = userDto.password();
+    public User(UserRequestDto userRequestDto) {
+        this.email = userRequestDto.email();
+        this.password = userRequestDto.password();
     }
 }
 

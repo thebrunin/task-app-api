@@ -1,6 +1,6 @@
 package com.task.api;
 
-import com.task.api.dto.UserDto;
+import com.task.api.dto.user.UserRequestDto;
 import com.task.api.model.User;
 import com.task.api.repository.UserRepository;
 import com.task.api.service.user.UserService;
@@ -31,7 +31,7 @@ public class UserServiceTest {
 
     @Test
     public void createUser() {
-        UserDto dto = new UserDto("bruno.email@gmail.com", "123456", "Bruno");
+        UserRequestDto dto = new UserRequestDto("bruno.email@gmail.com", "123456", "Bruno");
         User user = new User();
         user.setEmail(dto.email());
         user.setPassword(crypt.encode(dto.password()));

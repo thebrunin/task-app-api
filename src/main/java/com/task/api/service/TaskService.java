@@ -1,8 +1,7 @@
 package com.task.api.service;
 
 import com.task.api.enums.TaskStatus;
-import com.task.api.helper.DefaultResponseHelper;
-import com.task.api.helper.TaskHelper;
+import com.task.api.dto.task.TaskRequestDto;
 import com.task.api.model.Task;
 import com.task.api.model.User;
 import com.task.api.repository.TaskRepository;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +24,9 @@ public class TaskService {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> create(TaskHelper dto, User user) {
-        if (dto.getResponsibleUser() != null && !dto.getResponsibleUser().isEmpty()) {
-            User responsibleUser = userRepository.findById(dto.getResponsibleUser()).orElse(null);
+    public ResponseEntity<?> create(TaskRequestDto dto, User user) {
+        if (!ObjectUtils.isEmpty(dto.responsibleUser())) {
+            User responsibleUser = userRepository.findById(dto.responsibleUser()).orElse(null);
             if (responsibleUser == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário responsável não encontrado");
             }
@@ -39,7 +39,7 @@ public class TaskService {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(repository.save(task)));
     }
 
-    public Page<TaskHelper> getTasks(Pageable pag) {
+    public Page<TaskRequestDto> getTasks(Pageable pag) {
         return repository.findAll(pag).map(this::toDto);
     }
 
@@ -55,8 +55,8 @@ public class TaskService {
         return "Tarefa concluída com sucesso!";
     }
 
-    private Task fromDto(TaskHelper dto) { return ModelMapperUtils.map(dto, Task.class); }
+    private Task fromDto(TaskRequestDto dto) { return ModelMapperUtils.map(dto, Task.class); }
 
-    private TaskHelper toDto(Task entity) { return ModelMapperUtils.map(entity, TaskHelper.class); }
+    private TaskRequestDto toDto(Task entity) { return ObjectUtils.isEmpty(entity) ? new TaskRequestDto() : new TaskRequestDto(entity.getName(), entity.getResponsibleUser(), entity.getUserId(), entity.getDescription(), entity.getStatus(), entity.getDeadLine()); }
 }
 

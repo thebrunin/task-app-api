@@ -15,17 +15,8 @@ import java.time.LocalDateTime;
 @RequestMapping("/open")
 public class OpenRestController {
 
-    @Autowired
-    UserRepository userRepository;
-
     @GetMapping("/status")
     public String getStatus() {
         return "Servidor online - ".concat(LocalDateTime.now().toString());
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<Page<User>> getUsers(@PageableDefault(size=10, sort = {"name"}) Pageable pag) {
-        var page = userRepository.findAll(pag);
-        return ResponseEntity.ok(page);
     }
 }
