@@ -31,7 +31,8 @@ public class SecurityConfigurations {
                     .requestMatchers("/v2/api-docs").permitAll()
                     .requestMatchers("/open/**").permitAll()
                     .requestMatchers("/user/**").permitAll()
-                    .requestMatchers("/task/**").permitAll()
+                    .requestMatchers("/task/**").authenticated()
+                    .requestMatchers("/group/**").authenticated()
                     .anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
