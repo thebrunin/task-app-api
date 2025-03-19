@@ -28,11 +28,11 @@ public class UserRestController {
             @ApiResponse(responseCode = "201", description = "User created"),
             @ApiResponse(responseCode = "400", description = "Error on create user")
     })
-    public ResponseEntity<User> create(@RequestBody @Validated UserRequestDto userRequestDto) {
+    public ResponseEntity<?> create(@RequestBody @Validated UserRequestDto userRequestDto) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userRequestDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

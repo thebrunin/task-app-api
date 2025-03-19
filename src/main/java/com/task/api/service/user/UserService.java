@@ -1,5 +1,6 @@
 package com.task.api.service.user;
 
+import com.task.api.config.exceptions.UserEmailAlreadyExistsException;
 import com.task.api.dto.user.UserRequestDto;
 import com.task.api.model.User;
 import com.task.api.repository.UserRepository;
@@ -19,6 +20,11 @@ public class UserService {
     SenderMailService senderMailService;
 
     public User create(UserRequestDto userRequestDto) {
+
+        boolean userEmailAlreadyExists = repository.countByEmail(userRequestDto.email()) > 0;
+
+        if (userEmailAlreadyExists)
+            throw new UserEmailAlreadyExistsException();
 
         BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
         String cryptPass = crypt.encode(userRequestDto.password());

@@ -8,4 +8,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("{ email: ?0}")
     User findByLogin(String login);
+
+    int countByEmail(String email);
 }
