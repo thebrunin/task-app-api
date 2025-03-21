@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-
+// TODO: REFATORAR TODO O SERVICE QUE FOI COPIADO DO GroupService
 @Service
 public class GroupUserService {
 
