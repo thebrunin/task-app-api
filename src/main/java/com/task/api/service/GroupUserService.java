@@ -17,10 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class GroupService {
+public class GroupUserService {
 
     @Autowired
     GroupRepository repository;
+    @Autowired
+    UserRepository userRepository;
 
     public ResponseEntity<?> create(GroupRequestDto dto, User user) {
         Group group = this.fromDto(dto);
