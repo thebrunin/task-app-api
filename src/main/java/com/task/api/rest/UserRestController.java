@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,5 +48,17 @@ public class UserRestController {
         var page = userService
                 .find(pag);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("")
+    @Operation(description = "Get authenticated User")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = ""),
+            @ApiResponse(responseCode = "400", description = "Error on get user")
+    })
+    public ResponseEntity<?> get(@AuthenticationPrincipal User user) {
+        if (ObjectUtils.isEmpty(user))
+            return ResponseEntity.status(401).body("Usuário não autenticado.");
+        return ResponseEntity.ok(user);
     }
 }
