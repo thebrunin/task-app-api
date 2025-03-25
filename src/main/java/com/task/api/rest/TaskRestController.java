@@ -1,6 +1,7 @@
 package com.task.api.rest;
 
 import com.task.api.dto.task.TaskRequestDto;
+import com.task.api.dto.task.TaskResponseDto;
 import com.task.api.helper.TaskHelper;
 import com.task.api.model.User;
 import com.task.api.service.TaskService;
@@ -39,7 +40,7 @@ public class TaskRestController {
             @ApiResponse(responseCode = "200", description = "Tasks found"),
             @ApiResponse(responseCode = "400", description = "Error on get tasks")
     })
-    public ResponseEntity<Page<TaskRequestDto>> getTasks(@PageableDefault(size=10, sort = {"createdAt"}) Pageable pag) {
+    public ResponseEntity<Page<TaskResponseDto>> getTasks(@PageableDefault(size=10, sort = {"createdAt"}) Pageable pag) {
         try {
             return ResponseEntity.ok(taskService.getTasks(pag));
         } catch (Exception e) {

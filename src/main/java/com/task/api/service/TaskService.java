@@ -1,5 +1,6 @@
 package com.task.api.service;
 
+import com.task.api.dto.task.TaskResponseDto;
 import com.task.api.enums.TaskStatus;
 import com.task.api.dto.task.TaskRequestDto;
 import com.task.api.model.Task;
@@ -39,7 +40,7 @@ public class TaskService {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(repository.save(task)));
     }
 
-    public Page<TaskRequestDto> getTasks(Pageable pag) {
+    public Page<TaskResponseDto> getTasks(Pageable pag) {
         return repository.findAll(pag).map(this::toDto);
     }
 
@@ -57,6 +58,6 @@ public class TaskService {
 
     private Task fromDto(TaskRequestDto dto) { return ModelMapperUtils.map(dto, Task.class); }
 
-    private TaskRequestDto toDto(Task entity) { return ObjectUtils.isEmpty(entity) ? new TaskRequestDto() : new TaskRequestDto(entity.getName(), entity.getResponsibleUser(), entity.getUserId(), entity.getDescription(), entity.getStatus(), entity.getDeadLine()); }
+    private TaskResponseDto toDto(Task entity) { return new TaskResponseDto(entity); }
 }
 

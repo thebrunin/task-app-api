@@ -1,6 +1,7 @@
 package com.task.api;
 
 import com.task.api.dto.task.TaskRequestDto;
+import com.task.api.dto.task.TaskResponseDto;
 import com.task.api.enums.TaskStatus;
 import com.task.api.model.Task;
 import com.task.api.model.User;
@@ -67,7 +68,7 @@ public class TaskServiceTest {
 
         // Então
         assertEquals(HttpStatus.CREATED, createTaskResponse.getStatusCode());
-        TaskRequestDto createdTask = (TaskRequestDto) createTaskResponse.getBody();
+        TaskResponseDto createdTask = (TaskResponseDto) createTaskResponse.getBody();
         assertNotNull(createdTask);
         assertEquals(user.getId(), createdTask.userId());
         assertEquals(TaskStatus.CREATED, createdTask.status());
@@ -77,7 +78,7 @@ public class TaskServiceTest {
     @Test
     void testCreateTaskWithResponsibleUserNotFound() {
         // Dado
-        TaskRequestDto dto = new TaskRequestDto(null, "nonExistentUserId", null, null, null, null);
+        TaskRequestDto dto = new TaskRequestDto("name", "nonExistentUserId", null, null, null, null);
 
         when(userRepository.findById("nonExistentUserId")).thenReturn(Optional.empty());
 
@@ -93,13 +94,13 @@ public class TaskServiceTest {
     @Test
     void testCreateTaskWithoutResponsibleUser() {
         // Dado
-        TaskRequestDto dto = new TaskRequestDto();
+        TaskRequestDto dto = new TaskRequestDto("name", null, null, null, null, null);
 
         when(repository.save(any(Task.class))).thenAnswer(i -> i.getArgument(0));
 
         // Quando
         ResponseEntity<?> createTaskResponse = taskService.create(dto, user);
-        TaskRequestDto createdTask = (TaskRequestDto) createTaskResponse.getBody();
+        TaskResponseDto createdTask = (TaskResponseDto) createTaskResponse.getBody();
 
         // Então
         assertNotNull(createdTask);

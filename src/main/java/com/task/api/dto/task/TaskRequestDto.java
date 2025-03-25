@@ -12,20 +12,20 @@ public record TaskRequestDto(
         String userId,
         String description,
         TaskStatus status,
-        LocalDateTime deadline
+        LocalDateTime deadLine
 ) {
         public TaskRequestDto(String name,
                               String responsibleUser,
                               String userId,
                               String description,
                               TaskStatus status,
-                              LocalDateTime deadline) {
+                              LocalDateTime deadLine) {
                 this.name = name;
                 this.responsibleUser = responsibleUser;
                 this.userId = userId;
                 this.description = description;
                 this.status = status;
-                this.deadline = deadline;
+                this.deadLine = deadLine;
         }
 
         public TaskRequestDto() {
