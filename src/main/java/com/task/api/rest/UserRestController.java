@@ -1,6 +1,7 @@
 package com.task.api.rest;
 
 import com.task.api.dto.user.UserRequestDto;
+import com.task.api.dto.user.UserResponseDto;
 import com.task.api.model.User;
 import com.task.api.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,6 +60,6 @@ public class UserRestController {
     public ResponseEntity<?> get(@AuthenticationPrincipal User user) {
         if (ObjectUtils.isEmpty(user))
             return ResponseEntity.status(401).body("Usuário não autenticado.");
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(new UserResponseDto(user));
     }
 }
