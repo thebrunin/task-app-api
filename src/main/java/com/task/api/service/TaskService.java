@@ -25,11 +25,11 @@ public class TaskService {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> create(TaskRequestDto dto, User user) {
+    public TaskResponseDto create(TaskRequestDto dto, User user) throws RuntimeException{
         if (!ObjectUtils.isEmpty(dto.responsibleUser())) {
             User responsibleUser = userRepository.findById(dto.responsibleUser()).orElse(null);
             if (responsibleUser == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário responsável não encontrado");
+                throw new RuntimeException("Usuário responsável não encontrado");
             }
         }
         Task task = this.fromDto(dto);
@@ -37,7 +37,7 @@ public class TaskService {
         task.setStatus(TaskStatus.CREATED);
         task.setCreatedAt(LocalDateTime.now());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(repository.save(task)));
+        return toDto(repository.save(task));
     }
 
     public Page<TaskResponseDto> getTasks(Pageable pag) {

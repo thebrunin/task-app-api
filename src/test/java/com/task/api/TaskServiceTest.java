@@ -16,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
@@ -64,11 +62,9 @@ public class TaskServiceTest {
         when(repository.save(any(Task.class))).thenAnswer(i -> i.getArgument(0));
 
         // Quando
-        ResponseEntity<?> createTaskResponse = taskService.create(dto, user);
+        TaskResponseDto createdTask = taskService.create(dto, user);
 
         // Então
-        assertEquals(HttpStatus.CREATED, createTaskResponse.getStatusCode());
-        TaskResponseDto createdTask = (TaskResponseDto) createTaskResponse.getBody();
         assertNotNull(createdTask);
         assertEquals(user.getId(), createdTask.userId());
         assertEquals(TaskStatus.CREATED, createdTask.status());
@@ -83,11 +79,12 @@ public class TaskServiceTest {
         when(userRepository.findById("nonExistentUserId")).thenReturn(Optional.empty());
 
         // Quando
-        ResponseEntity<?> createTaskResponse = taskService.create(dto, user);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            taskService.create(dto, user);
+        });
 
         // Então
-        assertEquals(HttpStatus.BAD_REQUEST, createTaskResponse.getStatusCode());
-        String errorMessage = (String) createTaskResponse.getBody();
+        String errorMessage = exception.getMessage();
         assertEquals("Usuário responsável não encontrado", errorMessage);
     }
 
@@ -99,8 +96,7 @@ public class TaskServiceTest {
         when(repository.save(any(Task.class))).thenAnswer(i -> i.getArgument(0));
 
         // Quando
-        ResponseEntity<?> createTaskResponse = taskService.create(dto, user);
-        TaskResponseDto createdTask = (TaskResponseDto) createTaskResponse.getBody();
+        TaskResponseDto createdTask = taskService.create(dto, user);
 
         // Então
         assertNotNull(createdTask);

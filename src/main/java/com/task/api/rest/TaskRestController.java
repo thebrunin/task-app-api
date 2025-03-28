@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.stream.Stream;
+
 @RestController
 @RequestMapping("/task")
 public class TaskRestController {
@@ -30,7 +32,12 @@ public class TaskRestController {
             @ApiResponse(responseCode = "400", description = "Error on create task")
     })
     public ResponseEntity<?> create(@RequestBody TaskRequestDto taskDto, @AuthenticationPrincipal User user) {
-        return taskService.create(taskDto, user);
+        try {
+            TaskResponseDto response = taskService.create(taskDto, user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/list")
