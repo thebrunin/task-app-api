@@ -33,6 +33,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
+    - name: Definir variável de ambiente do MongoDB
+      run: echo "MONGO_URI=mongodb://localhost:27017/task-app" >> $GITHUB_ENV
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
