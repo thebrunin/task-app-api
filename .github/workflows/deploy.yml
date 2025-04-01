@@ -1,0 +1,15 @@
+name: Deploy to Render
+
+on:
+  workflow_run:
+    workflows: ["Maven Build"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Disparar deploy no Render
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
