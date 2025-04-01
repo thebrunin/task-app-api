@@ -30,9 +30,6 @@ spring.data.mongodb.uri=mongodb://usuario:senha@host:porta/nomeDoBanco
 
 ## Executando a Aplicação
 
-### Configure o .env
-- No .env na raiz do projeto, adicione a uri correspondente ao seu banco de dados.
-
 ### Via Maven
 
 1. Clone o repositório:
@@ -55,7 +52,7 @@ spring.data.mongodb.uri=mongodb://usuario:senha@host:porta/nomeDoBanco
 
 2. Execute o container:
    ```sh
-   docker run --env-file .env -p 8080:8080 task-app-api
+   docker run -p 8080:8080 task-app-api
    ```
 
 ### Verificando status da API:

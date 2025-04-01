@@ -20,10 +20,9 @@ WORKDIR /app
 
 # Copia o JAR gerado para a imagem final
 COPY --from=build /app/target/*.jar /app/app.jar
-COPY .env /app/.env
 
 # Instala bash para carregar variáveis de ambiente (opcional)
 RUN apk add --no-cache bash
 
 # Comando para rodar a aplicação carregando o .env
-CMD export $(grep -v '^#' /app/.env | xargs) && java -jar app.jar
+CMD java -jar app.jar
