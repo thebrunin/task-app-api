@@ -28,7 +28,7 @@ public class SecurityConfigurations {
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/swagger*").permitAll()
                     .requestMatchers("/swagger-resources/**").permitAll()
-                    .requestMatchers("/v2/api-docs").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/open/**").permitAll()
                     .requestMatchers("/user/**").permitAll()
                     .requestMatchers("/task/**").authenticated()
