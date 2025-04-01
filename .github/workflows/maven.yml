@@ -10,9 +10,11 @@ name: Maven Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - develop
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:

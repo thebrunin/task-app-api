@@ -1,10 +1,9 @@
 name: Deploy to Render
 
 on:
-  workflow_run:
-    workflows: ["Maven Build"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
