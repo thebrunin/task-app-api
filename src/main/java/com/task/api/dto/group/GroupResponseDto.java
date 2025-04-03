@@ -1,5 +1,6 @@
 package com.task.api.dto.group;
 
+import com.task.api.model.Group;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
@@ -15,4 +16,7 @@ public record GroupResponseDto(
 
         List<String> users
 ) {
+        public GroupResponseDto(Group entity) {
+                this(entity.getCode(), entity.getName(), entity.getDescription(), null);
+        }
 }

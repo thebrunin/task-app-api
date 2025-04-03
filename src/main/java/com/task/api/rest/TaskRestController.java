@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Stream;
-
 @RestController
 @RequestMapping("/task")
 public class TaskRestController {
@@ -48,7 +46,7 @@ public class TaskRestController {
     })
     public ResponseEntity<Page<TaskResponseDto>> getTasks(@PageableDefault(size=10, sort = {"createdAt"}) Pageable pag) {
         try {
-            return ResponseEntity.ok(taskService.getTasks(pag));
+            return ResponseEntity.ok(taskService.find(pag));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
