@@ -3,6 +3,7 @@ package com.task.api.service;
 import com.task.api.dto.task.TaskResponseDto;
 import com.task.api.enums.TaskStatus;
 import com.task.api.dto.task.TaskRequestDto;
+import com.task.api.interfaces.CrudServiceInterface;
 import com.task.api.model.Task;
 import com.task.api.model.User;
 import com.task.api.repository.TaskRepository;
@@ -11,20 +12,19 @@ import com.task.api.service.util.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 
 @Service
-public class TaskService {
+public class TaskService  implements CrudServiceInterface<TaskRequestDto, TaskResponseDto> {
     @Autowired
     TaskRepository repository;
     @Autowired
     UserRepository userRepository;
 
+    @Override
     public TaskResponseDto create(TaskRequestDto dto, User user) throws RuntimeException{
         if (!ObjectUtils.isEmpty(dto.responsibleUser())) {
             User responsibleUser = userRepository.findById(dto.responsibleUser()).orElse(null);
@@ -40,7 +40,8 @@ public class TaskService {
         return toDto(repository.save(task));
     }
 
-    public Page<TaskResponseDto> getTasks(Pageable pag) {
+    @Override
+    public Page<TaskResponseDto> find(Pageable pag) {
         return repository.findAll(pag).map(this::toDto);
     }
 

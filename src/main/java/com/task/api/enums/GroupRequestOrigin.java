@@ -1,5 +1,5 @@
 package com.task.api.enums;
 
-public enum RequestToGroupOrigin {
+public enum GroupRequestOrigin {
     USER,GROUP_OWNER_USER,GROUP_MEMBER_USER
 }
